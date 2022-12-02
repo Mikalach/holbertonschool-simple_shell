@@ -3,23 +3,57 @@
  * main - open a new bash
  * Return: 0
  */
+char **_strtok1(char *line)
+{
+	char *tok;
+	char delim[] = " ";
+	char **av;
+	int i = 0;
+
+	av = NULL;
+	av = malloc(sizeof(char *) * 100);
+	tok = strtok(line,delim);
+
+	while (tok)
+	{
+		av[i] = tok;
+		tok = strtok(NULL, delim);
+		i++;
+	}
+	return (av);
+}
+
+void frk(char **av, char **argenv)
+{
+	pid_t pid;
+	pid = fork();
+	int status;
+
+	if (pid == -1) /* error */
+		return;
+	if (pid == 0) /* if child */
+		execve(av[0], av, argenv);
+	else
+		wait(&status); /* wait for the child to end */
+}
 
 int main(void)
 {
 	pid_t pid;
 	char *bf;
-	size_t bufsize = 1;
+	size_t bufsize = 10;
 	int i = 0;
-	char *av[10];
+	char **av;
 	char *tok;
 	char delim[] = " ";
 	char *argenv[] = {"Home=/root",
 		"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
 		"TZ=America/Los_Angeles",
 		"_=/usr/bin/env",
-		NULL
-	};
+		NULL};
 
+	av = NULL;
+	av = malloc(sizeof(char *) * 100);
 
 	bf = (char *)malloc(bufsize * sizeof(char));
 	if (bf == NULL)
@@ -27,37 +61,18 @@ int main(void)
 		perror("Unable to allocate buffer");
 		exit(1);
 	}
-
-	pid = fork();
-
-	if (pid == -1) /* error */
-		return (0);
-
-	if (pid == 0) /* if child */
+	while (1)
 	{
-		while (!feof(stdin))
+		printf("($) ");
+		getline(&bf, &bufsize, stdin);
+		av = _strtok1(bf);
+		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
 		{
-			printf("($) ");
-			getline(&bf, &bufsize, stdin);
-			tok = strtok(bf, delim);
-			while (tok)
-			{
-				av[i] = tok;
-				tok = strtok(NULL, delim);
-				i++;
-			}
-			if (!(bf[0] == 'e' && bf[1] == 'x' && bf[2] == 'i' && bf[3] == 't'))
-				execve(av[0], av, argenv);
-			else
-			{
-				free(bf);
-				exit(0);
-			}
+			printf("exit\n");
+			exit(0);
 		}
-	}
-	else /* if parent */
-	{
-		wait(NULL); /* wait for the child to end */
+		else
+			frk(av, argenv);
 	}
 	free(bf);
 	return (0);
