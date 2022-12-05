@@ -20,7 +20,7 @@ void printfullenv(char **envp)
 char **_strtok1(char *line)
 {
 	char *tok; /* string tokening */
-	char delim[] = "\n"; /* delimiter */
+	char delim[] = " \n"; /* delimiter */
 	char **av; /* string tokenized */
 	int i = 0;
 
@@ -39,6 +39,8 @@ char **_strtok1(char *line)
 	}
 	av[i] == NULL;
 
+	printf("%s\n", av[0]);
+
 	return (av);
 }
 
@@ -55,11 +57,12 @@ void frk(char **av, char **envp)
 	pid = fork();
 
 	if (pid == -1) /* error */
-		exit(1);
+		exit (0);
 	if (pid == 0) /* if child */
 	{
 		if (execve(cpy, av, envp) == -1)
 			printf("\\%s isn't a valid command\n", cpy);
+		exit (1);
 	}
 	else
 		wait(NULL); /* wait for the child to end */
@@ -83,16 +86,12 @@ int main(__attribute__ ((unused))int argc, char **argv, char *envp[])
 	av = NULL;
 	av = calloc(bufsize, sizeof(char *));
 	if (av == NULL)
-	{
-		perror("Allocation failed (av)");
-		exit(1);
-	}
+	{perror("Allocation failed (av)");
+		exit(1); }
 	bf = calloc(bufsize, sizeof(char *));
 	if (bf == NULL)
-	{
-		perror("Allocation failed (bf)");
-		exit(1);
-	}
+	{perror("Allocation failed (bf)");
+		exit(1); }
 	/* The Simple Shell */
 	while (1)
 	{
@@ -102,6 +101,11 @@ int main(__attribute__ ((unused))int argc, char **argv, char *envp[])
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
 		{
 			printf("exit\n");
+			exit(0);
+		}
+		else if (strcmp(bf, "env\n") == 0)
+		{
+			printfullenv(envp);
 			exit(0);
 		}
 		/* if we enter another command (+ options) */
