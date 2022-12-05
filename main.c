@@ -27,7 +27,7 @@ char **_strtok1(char *line)
 	/* initiating tokenization*/
 	av = NULL;
 	av = malloc(sizeof(char *) * 1024);
-	//tok = strtok(line, delim);
+	tok = strtok(line, delim);
 
 	/*tokenizing into av*/
 	while (tok)
@@ -57,12 +57,12 @@ void frk(char **av, char **envp)
 	pid = fork();
 
 	if (pid == -1) /* error */
-		exit (0);
+		exit(0);
 	if (pid == 0) /* if child */
 	{
 		if (execve(cpy, av, envp) == -1)
 			printf("\\%s isn't a valid command\n", cpy);
-		exit (1);
+		exit(1);
 	}
 	else
 		wait(NULL); /* wait for the child to end */
@@ -78,12 +78,11 @@ void frk(char **av, char **envp)
 int main(__attribute__ ((unused))int argc, char **argv, char *envp[])
 {
 	pid_t pid;
-	char *bf, *tok, **av;
+	char *bf, *tok, **av = NULL;
 	size_t bufsize = 1024;
 	int i = 0;
 
 	/* Array-Buffer creation */
-	av = NULL;
 	av = calloc(bufsize, sizeof(char *));
 	if (av == NULL)
 	{perror("Allocation failed (av)");
