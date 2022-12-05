@@ -14,19 +14,17 @@ void printfullenv(char **envp)
 
 /**
  * _strtok1 - Tokenize a long string into multiple shorter strings
+ * @av: source buffer
  * @line: line we want to tokenize
  * Return: the Array of shorter strings
  */
-char **_strtok1(char *line)
+void _strtok1(char **av, char *line)
 {
 	char *tok; /* string tokening */
-	char delim[] = " \n"; /* delimiter */
-	char **av; /* string tokenized */
+	char delim[] = " \n\t"; /* delimiter */
 	int i = 0;
 
 	/* initiating tokenization*/
-	av = NULL;
-	av = malloc(sizeof(char *) * 1024);
 	tok = strtok(line, delim);
 
 	/*tokenizing into av*/
@@ -39,30 +37,26 @@ char **_strtok1(char *line)
 	}
 	av[i] == NULL;
 
-	printf("%s\n", av[0]);
-
-	return (av);
+	free(tok);
 }
 
 /**
  * frk - fork and execve
  * @av: array of string used to call a function with execve
  * @envp: environement variable
+ * @filename: name of the shell
  */
-void frk(char **av, char **envp)
+void frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
-	char *cpy = av[0];
 
 	pid = fork();
 
-	if (pid == -1) /* error */
-		exit(0);
 	if (pid == 0) /* if child */
 	{
-		if (execve(cpy, av, envp) == -1)
-			printf("\\%s isn't a valid command\n", cpy);
-		exit(1);
+		if (execve(av[0], av, envp) == -1)
+			printf("%s: %s: command not found\n", filename, av[0]);
+		exit(0);
 	}
 	else
 		wait(NULL); /* wait for the child to end */
@@ -75,19 +69,19 @@ void frk(char **av, char **envp)
  * @argc: unused
  * Return: 0
  */
-int main(__attribute__ ((unused))int argc, char **argv, char *envp[])
+int main(int argc, char **argv, char **envp)
 {
 	pid_t pid;
 	char *bf, *tok, **av = NULL;
 	size_t bufsize = 1024;
-	int i = 0;
+	int i = 0, ext = 0;
 
 	/* Array-Buffer creation */
-	av = calloc(bufsize, sizeof(char *));
+	av = calloc(100, sizeof(char *));
 	if (av == NULL)
 	{perror("Allocation failed (av)");
 		exit(1); }
-	bf = calloc(bufsize, sizeof(char *));
+	bf = calloc(300, sizeof(char *));
 	if (bf == NULL)
 	{perror("Allocation failed (bf)");
 		exit(1); }
@@ -98,23 +92,23 @@ int main(__attribute__ ((unused))int argc, char **argv, char *envp[])
 		getline(&bf, &bufsize, stdin);
 		/* if we want to exit */
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
-		{
-			printf("exit\n");
-			exit(0);
-		}
+			ext = 1;
 		else if (strcmp(bf, "env\n") == 0)
 		{
 			printfullenv(envp);
-			exit(0);
+			ext = 1;
 		}
 		/* if we enter another command (+ options) */
 		else
 		{
-			av = _strtok1(bf);
-			frk(av, envp);
+			_strtok1(av, bf);
+			frk(av, envp, argv[0]);
 		}
+
+		if (ext == 1)
+			break;
 	}
-	/* Free everything when finished*/
 	free(bf);
+	free(av);
 	return (0);
 }
