@@ -45,14 +45,21 @@ void _strtok1(char **av, char *line)
 void frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
+	int test = 1;
 
 	pid = fork();
 
 	if (pid == 0) /* if child */
 	{
-		if (execve(av[0], av, envp) == -1)
-			printf("%s: %s: command not found\n", filename, av[0]);
-		exit(2);
+		if (av && *av)
+		{
+			test = execve(av[0], av, envp);
+			if (test == -1)
+			{
+				printf("%s: %s: command not found\n", filename, av[0]);
+			}
+		}
+		exit(1);
 	}
 	else
 		wait(NULL); /* wait for the child to end */
