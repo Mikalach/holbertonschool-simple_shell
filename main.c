@@ -52,7 +52,7 @@ void frk(char **av, char **envp, char *filename)
 	{
 		if (execve(av[0], av, envp) == -1)
 			printf("%s: %s: command not found\n", filename, av[0]);
-		exit(0);
+		exit(2);
 	}
 	else
 		wait(NULL); /* wait for the child to end */
