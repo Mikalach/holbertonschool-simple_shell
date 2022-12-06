@@ -24,9 +24,6 @@ void _strtok1(char **av, char *line)
 	char delim[] = " \n\t"; /* delimiter */
 	int i = 0;
 
-	/* initiating tokenization*/
-	tok = strtok(line, delim);
-
 	/*tokenizing into av*/
 	while (tok)
 	{
@@ -35,9 +32,6 @@ void _strtok1(char **av, char *line)
 		line = NULL;
 		i++;
 	}
-	av[i] == NULL;
-
-	free(tok);
 }
 
 /**
@@ -69,19 +63,18 @@ void frk(char **av, char **envp, char *filename)
  * @argc: unused
  * Return: 0
  */
-int main(int argc, char **argv, char **envp)
+int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
-	pid_t pid;
-	char *bf, *tok, **av = NULL;
+	char *bf, **av = NULL;
 	size_t bufsize = 1024;
-	int i = 0, ext = 0;
+	int ext = 0;
 
 	/* Array-Buffer creation */
-	av = calloc(100, sizeof(char *));
+	av = calloc(1024, sizeof(char *));
 	if (av == NULL)
 	{perror("Allocation failed (av)");
 		exit(1); }
-	bf = calloc(300, sizeof(char *));
+	bf = calloc(1024, sizeof(char *));
 	if (bf == NULL)
 	{perror("Allocation failed (bf)");
 		exit(1); }
