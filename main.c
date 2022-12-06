@@ -87,10 +87,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
 			ext = 1;
 		else if (strcmp(bf, "env\n") == 0)
-		{
 			printfullenv(envp);
-			ext = 1;
-		}
 		/* if we enter another command (+ options) */
 		else
 		{
