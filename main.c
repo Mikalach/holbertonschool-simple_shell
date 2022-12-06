@@ -81,7 +81,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	/* The Simple Shell */
 	while (1)
 	{
-		printf("($) ");
+		/* printf("($) "); */
 		getline(&bf, &bufsize, stdin);
 		/* if we want to exit */
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
