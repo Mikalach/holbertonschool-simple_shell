@@ -20,17 +20,19 @@ void printfullenv(char **envp)
  */
 void _strtok1(char **av, char *line)
 {
-	char *tok; /* string tokening */
+	char *tok = NULL; /* string tokening */
 	char delim[] = " \n\t"; /* delimiter */
 	int i = 0;
 
 	/*tokenizing into av*/
-	while (tok)
+	if (line)
 	{
-		tok = strtok(line, delim);
-		av[i] = tok;
-		line = NULL;
-		i++;
+		do{
+			tok = strtok(line, delim);
+			av[i] = tok;
+			line = NULL;
+			i++;
+		}while(tok);
 	}
 }
 
@@ -65,7 +67,7 @@ void frk(char **av, char **envp, char *filename)
  */
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
-	char *bf, **av = NULL;
+	char *bf = NULL, **av = NULL;
 	size_t bufsize = 1024;
 	int ext = 0;
 
