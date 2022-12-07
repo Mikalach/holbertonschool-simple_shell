@@ -6,6 +6,9 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <string.h>
+
+void _path1(char *impath, char **usrinpt);
 
 #endif
