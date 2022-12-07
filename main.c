@@ -101,10 +101,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else
 		{
 			_strtok1(av, bf);
-			if (*av == NULL)
-			{
-				break;
-			}
+			_path1(envp[12], &av[0]);
 			frk(av, envp, argv[0]);
 		}
 
