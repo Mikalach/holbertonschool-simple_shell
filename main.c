@@ -46,7 +46,7 @@ int frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
 	int test = 1;
-	int status;
+	int status = 0;
 	int exit_status = 0;
 
 	pid = fork();
