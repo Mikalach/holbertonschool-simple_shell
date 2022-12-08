@@ -42,10 +42,12 @@ void _strtok1(char **av, char *line)
  * @envp: environement variable
  * @filename: name of the shell
  */
-void frk(char **av, char **envp, char *filename)
+int frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
 	int test = 1;
+	int status;
+	int exit_status = 0;
 
 	pid = fork();
 
@@ -62,7 +64,15 @@ void frk(char **av, char **envp, char *filename)
 		exit(1);
 	}
 	else
+	{
 		wait(NULL); /* wait for the child to end */
+		if (WIFEXITED(status))
+			{
+				exit_status = WEXITSTATUS(status);
+				return(exit_status);
+			}
+	}
+	return(1);
 }
 
 /**
