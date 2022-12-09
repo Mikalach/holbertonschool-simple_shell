@@ -28,12 +28,12 @@ void _strtok1(char **av, char *line)
 	/*tokenizing into av*/
 	if (line)
 	{
-		do{
+		do {
 			tok = strtok(line, delim);
 			av[i] = tok;
 			line = NULL;
 			i++;
-		}while(tok);
+		} while (tok);
 	}
 }
 
