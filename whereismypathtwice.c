@@ -8,20 +8,20 @@ void _path1(char *impath, char **usrinpt)
 	char *path_tmp = NULL;
 	struct stat st;
 
-	if (!tokenp || !*usrinpt || !tokenp || !path_tmp)
+	//tokenp = malloc(sizeof(char *) * 1024);
+	if (!*usrinpt)
 	{
 		free(tokenp);
 		return;
 	}
 	path_tmp = strdup(impath);
 
-	do{
+	do {
 		usep = strtok(path_tmp, ":=");
 		tokenp[x] = usep;
 		path_tmp = NULL;
 		x++;
-	}
-	while(usep);
+	} while (usep);
 
 	x = x - 2;
 	while (x > 0)
@@ -30,11 +30,10 @@ void _path1(char *impath, char **usrinpt)
 		strcat(tokenp[x], *usrinpt);
 		if (stat(tokenp[x], &st) == 0)
 		{
-			*usrinpt = tokenp[x];
-			free(tokenp[x]);
+			*usrinpt = strdup(tokenp[x]);
 			break;
 		}
-		free(tokenp[x]);
+		//free(tokenp[x]);
 		x--;
 	}
 	free(usep);
