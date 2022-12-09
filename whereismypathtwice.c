@@ -20,14 +20,12 @@ void _path1(char *impath, char **usrinpt)
 		return;
 	}
 	path_tmp = strdup(impath);
-
 	do {
 		usep = strtok(path_tmp, ":=");
 		tokenp[x] = usep;
 		path_tmp = NULL;
 		x++;
 	} while (usep);
-
 	x = x - 2;
 	while (x > 0)
 	{
@@ -36,8 +34,6 @@ void _path1(char *impath, char **usrinpt)
 		if (stat(tokenp[x], &st) == 0)
 		{
 			*usrinpt = strdup(tokenp[x]);
-			if (!tokenp[x])
-				free(tokenp[x]);
 			break;
 		}
 		if (!tokenp[x])
@@ -46,7 +42,6 @@ void _path1(char *impath, char **usrinpt)
 	}
 	free(usep);
 	free(path_tmp);
-	if (!tokenp)
-		free(tokenp);
+	free(tokenp);
 	return;
 }
