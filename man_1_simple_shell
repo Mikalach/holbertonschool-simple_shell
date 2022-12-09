@@ -1,6 +1,6 @@
 .TH HSH 1
 .SH NAME
-hsh \- holbertonschool-simple_shell
+qhsh \- holbertonschool-simple_shell
 .SH SYNOPSIS
 .B hsh
 [command] [options ...]
@@ -11,11 +11,8 @@ hsh \- is a holberton school first trimester project
 is a shell command interpreter that executes command read from the standard
 input or from file.
 .B hsh
-is intend to be a clone of the standard command interpreter of
-.B Unix
-and
-.B Unix-like
-system.
+is intend to be a clone of the standard command interpreter of .B Unix
+and .B Unix-like system.
 .SH OPTIONS
 A  simple command is a sequence of optional variable assignments followed by
 blank-separated words and redirections, and terminated by a control operator.
@@ -24,3 +21,24 @@ zero.  The remaining words are passed as arguments to the invoked command.
 .PP
 The return value of a simple command is its exit status, or 128+n if the command
 is terminated by signal n.
+.SH EXEMPLES:
+.PP
+ Exemple 1
+ root@c4881d994d5c:~/holbertonschool-simple_shell# ./hsh
+ /bin/ls -l
+ total 44
+ -rw-r--r-- 1 root root   516 Dec  9 03:53 AUTHORS
+ -rwxr-xr-x 1 root root 17672 Dec  9 04:04 hsh
+ -rw-r--r-- 1 root root  2134 Dec  9 04:17 main.c
+ -rwxr-xr-x 1 root root   820 Dec  9 03:53 man_1_simple_shell
+ -rw-r--r-- 1 root root  2656 Dec  9 03:53 README.md
+ -rw-r--r-- 1 root root   259 Dec  9 03:53 simples.h
+ -rw-r--r-- 1 root root   911 Dec  9 04:19 whereismypathtwice.c
+ not a command
+ ./hsh: not: command not found
+ notACommand
+ pwd
+ /root/holbertonschool-simple_shell
+ exit
+ root@c4881d994d5c:~/holbertonschool-simple_shell#
+.PP
