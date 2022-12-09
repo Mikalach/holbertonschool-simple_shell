@@ -17,7 +17,7 @@ void _path1(char *impath, char **usrinpt)
 	if (!*usrinpt)
 	{
 		free(tokenp);
-		return;
+		/*return;*/
 	}
 	path_tmp = strdup(impath);
 	do {
@@ -43,5 +43,5 @@ void _path1(char *impath, char **usrinpt)
 	free(usep);
 	free(path_tmp);
 	free(tokenp);
-	return;
+	/*return;*/
 }
