@@ -3,7 +3,8 @@
 /**
  * printfullenv - Print the full environnement thingy, used for tests
  * @envp: environnement variable
- */
+ *Return: void
+*/
 void printfullenv(char **envp)
 {
 	int i = 0;
@@ -16,7 +17,7 @@ void printfullenv(char **envp)
  * _strtok1 - Tokenize a long string into multiple shorter strings
  * @av: source buffer
  * @line: line we want to tokenize
- * Return: the Array of shorter strings
+ * Return: void
  */
 void _strtok1(char **av, char *line)
 {
@@ -41,13 +42,12 @@ void _strtok1(char **av, char *line)
  * @av: array of string used to call a function with execve
  * @envp: environement variable
  * @filename: name of the shell
+ *Return: void
  */
-int frk(char **av, char **envp, char *filename)
+void frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
 	int test = 1;
-	int status = 0;
-	int exit_status = 0;
 
 	pid = fork();
 
@@ -64,15 +64,7 @@ int frk(char **av, char **envp, char *filename)
 		exit(1);
 	}
 	else
-	{
-		wait(&status); /* wait for the child to end */
-		if (WIFEXITED(status))
-			{
-				exit_status = WEXITSTATUS(status);
-				return(exit_status);
-			}
-	}
-	return(1);
+		wait(NULL); /* wait for the child to end */
 }
 
 /**

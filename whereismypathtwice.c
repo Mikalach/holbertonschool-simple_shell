@@ -1,5 +1,11 @@
 #include "simples.h"
 
+/**
+ *_path1 - change the command without / into the good one
+ *@impath: is the path where the command is stored
+ *@usrimpt: is the input from the user
+ *Return: void
+*/
 void _path1(char *impath, char **usrinpt)
 {
 	int x = 0;
@@ -8,7 +14,6 @@ void _path1(char *impath, char **usrinpt)
 	char *path_tmp = NULL;
 	struct stat st;
 
-	//tokenp = malloc(sizeof(char *) * 1024);
 	if (!*usrinpt)
 	{
 		free(tokenp);
@@ -33,7 +38,6 @@ void _path1(char *impath, char **usrinpt)
 			*usrinpt = strdup(tokenp[x]);
 			break;
 		}
-		//free(tokenp[x]);
 		x--;
 	}
 	free(usep);
