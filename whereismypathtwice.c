@@ -36,12 +36,17 @@ void _path1(char *impath, char **usrinpt)
 		if (stat(tokenp[x], &st) == 0)
 		{
 			*usrinpt = strdup(tokenp[x]);
+			if (!tokenp[x])
+				free(tokenp[x]);
 			break;
 		}
+		if (!tokenp[x])
+			free(tokenp[x]);
 		x--;
 	}
 	free(usep);
 	free(path_tmp);
-	free(tokenp);
+	if (!tokenp)
+		free(tokenp);
 	return;
 }
