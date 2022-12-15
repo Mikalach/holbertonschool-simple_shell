@@ -10,7 +10,6 @@ int _path1(char *impath, char **usrinpt)
 {
 	char *usep = NULL;
 	char *copy_usep = NULL;
-	char *path_tmp = NULL;
 	struct stat st;
 
 	if (!*usrinpt)
@@ -20,7 +19,7 @@ int _path1(char *impath, char **usrinpt)
 
 	copy_usep = malloc(sizeof(char) * 1024);
 
-	while (usep = strtok(impath, ":="))
+	while ((usep = strtok(impath, ":=")))
 	{
 		impath = NULL;
 		strcpy(copy_usep, usep);

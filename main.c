@@ -15,7 +15,6 @@ void printfullenv(char **envp)
 
 /**
  * getPath - get the path throught envp
- * @path: int
  * @envp: environnement
  * Return: path
  */
@@ -94,12 +93,10 @@ void frk(char **av, char **envp, char *filename)
  * Return: 0
  */
 int main(__attribute__((unused))int argc, char **argv, char **envp)
-{
-	char *bf = NULL, **av = NULL, *pathBuffer = NULL;
+{char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
 	int ext = 0, path = 100, freeAvTest;
 
-	/* Array-Buffer creation */
 	av = calloc(1024, sizeof(char *));
 	if (av == NULL)
 	{perror("Allocation failed (av)");
@@ -115,30 +112,24 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	path = getPath(envp);
 	/* The Simple Shell */
 	while (1)
-	{
-		freeAvTest = 0;
+	{freeAvTest = 0;
 		if (envp[path])
 			strcpy(pathBuffer, envp[path]);
-		/* printf("($) "); */
 		getline(&bf, &bufsize, stdin);
-		/* if we want to exit */
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
 			ext = 1;
 		else if (strcmp(bf, "env\n") == 0)
 			printfullenv(envp);
-		/* if we enter another command (+ options) */
 		else
 		{
 			_strtok1(av, bf);
 			freeAvTest = _path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
-
 		if (ext == 1)
 			break;
 		if (freeAvTest == 1)
-			free(av[0]);
-	}
+			free(av[0]); }
 	free(pathBuffer);
 	free(bf);
 	free(av);
