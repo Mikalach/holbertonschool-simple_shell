@@ -12,7 +12,7 @@ int _path1(char *impath, char **usrinpt)
 	char *copy_usep = NULL;
 	struct stat st;
 
-	if (!*usrinpt)
+	if (!*usrinpt || !impath)
 		return (0);
 	if (stat(*usrinpt, &st) == 0)
 		return (0);

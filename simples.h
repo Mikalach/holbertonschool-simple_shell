@@ -9,6 +9,9 @@
 #include <sys/stat.h>
 #include <string.h>
 
+#define ERR(s) {perror("Allocation failed ((s))"); exit((1));}
+#define SETVAR {freeAvTest = 0; isOnlySpaces = 0;}
+#define FREEALL {free(pathBuffer); free(bf); free(av);}
 int _path1(char *impath, char **usrinpt);
 int only_space(char *usrinpt);
 #endif
