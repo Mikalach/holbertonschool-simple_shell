@@ -13,11 +13,12 @@ void _path1(char *impath, char **usrinpt)
 	char *path_tmp = NULL;
 	struct stat st;
 
-	copy_usep = malloc(sizeof(char) * 1024);
-
 	if (!*usrinpt)
-	{
-	}
+		return;
+	if (stat(*usrinpt, &st) == 0)
+		return;
+
+	copy_usep = malloc(sizeof(char) * 1024);
 
 	path_tmp = strdup(impath);
 

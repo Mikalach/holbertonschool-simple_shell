@@ -95,7 +95,7 @@ void frk(char **av, char **envp, char *filename)
  */
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
-	char *bf = NULL, **av = NULL;
+	char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
 	int ext = 0, path = 100;
 
@@ -104,13 +104,20 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	if (av == NULL)
 	{perror("Allocation failed (av)");
 		exit(1); }
-	bf = calloc(1024, sizeof(char *));
+	bf = calloc(1024, sizeof(char));
 	if (bf == NULL)
 	{perror("Allocation failed (bf)");
 		exit(1); }
+	pathBuffer = calloc(1000, sizeof(char));
+	if (pathBuffer == NULL)
+	{perror("Allocation failed (bf)");
+		exit(1); }
+	path = getPath(envp);
 	/* The Simple Shell */
 	while (1)
 	{
+		if (envp[path])
+			strcpy(pathBuffer, envp[path]);
 		/* printf("($) "); */
 		getline(&bf, &bufsize, stdin);
 		/* if we want to exit */
@@ -122,14 +129,14 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else
 		{
 			_strtok1(av, bf);
-			path = getPath(envp);
-			_path1(envp[path], &av[0]);
+			_path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
 
 		if (ext == 1)
 			break;
 	}
+	free(pathBuffer);
 	free(bf);
 	free(av);
 	return (0);
