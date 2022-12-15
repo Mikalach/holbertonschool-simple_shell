@@ -55,6 +55,7 @@ int _strtok1(char **av, char *line)
 				return (1);
 		} while (tok);
 	}
+	return (0);
 }
 
 /**
