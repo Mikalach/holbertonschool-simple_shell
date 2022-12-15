@@ -81,10 +81,10 @@ int frk(char **av, char **envp, char *filename)
 			if (test == -1)
 			{
 				printf("%s: %s: command not found\n", filename, av[0]);
-				exit(2);
+				exit(EXIT_FAILURE);
 			}
 		}
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	else
 		wait(&status); /* wait for the child to end */
