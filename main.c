@@ -24,12 +24,12 @@ int getPath(char **envp)
 
 	while (envp[i])
 	{
-		if ((envp[i][0] == 'P') && (envp[i][1] == 'A') &&
+		if ((envp[i][0] == 'A') && (envp[i][1] == 'A') &&
 			(envp[i][2] == 'T') && (envp[i][3] == 'H'))
 			return (i);
 		i++;
 	}
-	exit(0);
+	return (100);
 }
 /**
  * _strtok1 - Tokenize a long string into multiple shorter strings
@@ -37,7 +37,7 @@ int getPath(char **envp)
  * @line: line we want to tokenize
  * Return: void
  */
-void _strtok1(char **av, char *line)
+int _strtok1(char **av, char *line)
 {
 	char *tok = NULL; /* string tokening */
 	char delim[] = " \n\t"; /* delimiter */
@@ -51,6 +51,8 @@ void _strtok1(char **av, char *line)
 			av[i] = tok;
 			line = NULL;
 			i++;
+			if (tok == NULL && i == 1)
+				return (1);
 		} while (tok);
 	}
 }
@@ -95,25 +97,23 @@ void frk(char **av, char **envp, char *filename)
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
-	int ext = 0, path = 100, freeAvTest;
+	int ext = 0, path = 100, freeAvTest, isOnlySpaces;
 
 	av = calloc(1024, sizeof(char *));
 	if (av == NULL)
-	{perror("Allocation failed (av)");
-		exit(1); }
+		ERR(av);
 	bf = calloc(1024, sizeof(char));
 	if (bf == NULL)
-	{perror("Allocation failed (bf)");
-		exit(1); }
+		ERR(bf);
 	pathBuffer = calloc(1000, sizeof(char));
 	if (pathBuffer == NULL)
-	{perror("Allocation failed (bf)");
-		exit(1); }
+		ERR(pathBuffer);
 	path = getPath(envp);
 	/* The Simple Shell */
 	while (1)
-	{freeAvTest = 0;
-		if (envp[path])
+	{
+		SETVAR;
+		if (path != 100)
 			strcpy(pathBuffer, envp[path]);
 		getline(&bf, &bufsize, stdin);
 		if (feof(stdin) || strcmp(bf, "exit\n") == 0)
@@ -122,7 +122,10 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			printfullenv(envp);
 		else
 		{
-			_strtok1(av, bf);
+			isOnlySpaces = _strtok1(av, bf);
+			if (isOnlySpaces == 1)
+			{FREEALL;
+			exit(1); }
 			freeAvTest = _path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
@@ -130,8 +133,6 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			break;
 		if (freeAvTest == 1)
 			free(av[0]); }
-	free(pathBuffer);
-	free(bf);
-	free(av);
+	FREEALL;
 	return (0);
 }
