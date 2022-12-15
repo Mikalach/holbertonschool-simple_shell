@@ -66,10 +66,10 @@ int _strtok1(char **av, char *line)
  * @filename: name of the shell
  *Return: void
  */
-void frk(char **av, char **envp, char *filename)
+int frk(char **av, char **envp, char *filename)
 {
 	pid_t pid;
-	int test = 1;
+	int test = 1, status = 0;
 
 	pid = fork();
 
@@ -88,6 +88,10 @@ void frk(char **av, char **envp, char *filename)
 	}
 	else
 		wait(NULL); /* wait for the child to end */
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return (status);
 }
 
 /**
@@ -100,7 +104,7 @@ void frk(char **av, char **envp, char *filename)
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
-	int ext = 0, path = 100, freeAvTest, isOnlySpaces;
+	int ext = 0, path = 100, freeAvTest, isOnlySpaces, wifeexit = 0;
 	struct stat st;
 
 	av = calloc(1024, sizeof(char *));
@@ -128,15 +132,20 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			{
 				freeAvTest = _path1(pathBuffer, &av[0]);
 				if (stat(av[0], &st) == 0)
-					frk(av, envp, argv[0]);
+					wifeexit = frk(av, envp, argv[0]);
 				else
 					dprintf(STDERR_FILENO, "./hsh: 1: %s: not found\n", av[0]);
+				if (wifeexit != 0)
+				{
+					FREEALL;
+					exit(wifeexit);
+				}
 			}
 		}
 		if (ext == 1)
 			break;
-		if (freeAvTest == 1)
-			free(av[0]); }
+	if (freeAvTest == 1)
+		free(av[0]); }
 	FREEALL;
 	return (0);
 }
