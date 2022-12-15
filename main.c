@@ -126,7 +126,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			isOnlySpaces = _strtok1(av, bf);
 			if (isOnlySpaces == 1)
 			{FREEALL;
-			exit(1); }
+			exit(0); }
 			freeAvTest = _path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
