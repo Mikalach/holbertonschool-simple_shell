@@ -6,7 +6,7 @@
  *@usrinpt: is the input from the user
  *Return: void
 */
-void _path1(char *impath, char **usrinpt)
+int _path1(char *impath, char **usrinpt)
 {
 	char *usep = NULL;
 	char *copy_usep = NULL;
@@ -14,13 +14,11 @@ void _path1(char *impath, char **usrinpt)
 	struct stat st;
 
 	if (!*usrinpt)
-		return;
+		return (0);
 	if (stat(*usrinpt, &st) == 0)
-		return;
+		return (0);
 
 	copy_usep = malloc(sizeof(char) * 1024);
-
-	//path_tmp = strdup(impath);
 
 	while (usep = strtok(impath, ":="))
 	{
@@ -31,9 +29,10 @@ void _path1(char *impath, char **usrinpt)
 		if (stat(copy_usep, &st) == 0)
 		{
 			*usrinpt = strdup(copy_usep);
-			break;
+			free(copy_usep);
+			return (1);
 		}
 	}
 	free(copy_usep);
-	//free(path_tmp);
+	return (0);
 }

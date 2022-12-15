@@ -97,7 +97,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
-	int ext = 0, path = 100;
+	int ext = 0, path = 100, freeAvTest;
 
 	/* Array-Buffer creation */
 	av = calloc(1024, sizeof(char *));
@@ -116,6 +116,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	/* The Simple Shell */
 	while (1)
 	{
+		freeAvTest = 0;
 		if (envp[path])
 			strcpy(pathBuffer, envp[path]);
 		/* printf("($) "); */
@@ -129,12 +130,14 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else
 		{
 			_strtok1(av, bf);
-			_path1(pathBuffer, &av[0]);
+			freeAvTest = _path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
 
 		if (ext == 1)
 			break;
+		if (freeAvTest == 1)
+			free(av[0]);
 	}
 	free(pathBuffer);
 	free(bf);
