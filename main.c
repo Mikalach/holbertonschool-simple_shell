@@ -100,6 +100,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 {char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
 	int ext = 0, path = 100, freeAvTest, isOnlySpaces;
+	struct stat st;
 
 	av = calloc(1024, sizeof(char *));
 	if (av == NULL)
@@ -111,10 +112,8 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 	if (pathBuffer == NULL)
 		ERR(pathBuffer);
 	path = getPath(envp);
-	/* The Simple Shell */
 	while (1)
-	{
-		SETVAR;
+	{	SETVAR;
 		if (path != 100)
 			strcpy(pathBuffer, envp[path]);
 		getline(&bf, &bufsize, stdin);
@@ -123,13 +122,15 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else if (strcmp(bf, "env\n") == 0)
 			printfullenv(envp);
 		else
-		{
-			isOnlySpaces = _strtok1(av, bf);
+		{	isOnlySpaces = _strtok1(av, bf);
 			if (isOnlySpaces == 1)
 			{FREEALL;
 			exit(0); }
 			freeAvTest = _path1(pathBuffer, &av[0]);
-			frk(av, envp, argv[0]);
+			if (stat(av[0], &st) == 0)
+				frk(av, envp, argv[0]);
+			else
+				printf("%s: %s: command not found\n", argv[0], av[0]);
 		}
 		if (ext == 1)
 			break;
