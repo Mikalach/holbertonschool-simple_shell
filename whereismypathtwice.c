@@ -20,11 +20,11 @@ void _path1(char *impath, char **usrinpt)
 
 	copy_usep = malloc(sizeof(char) * 1024);
 
-	path_tmp = strdup(impath);
+	//path_tmp = strdup(impath);
 
-	while (usep = strtok(path_tmp, ":="))
+	while (usep = strtok(impath, ":="))
 	{
-		path_tmp = NULL;
+		impath = NULL;
 		strcpy(copy_usep, usep);
 		strcat(copy_usep, "/");
 		strcat(copy_usep, *usrinpt);
@@ -35,5 +35,5 @@ void _path1(char *impath, char **usrinpt)
 		}
 	}
 	free(copy_usep);
-	free(path_tmp);
+	//free(path_tmp);
 }
