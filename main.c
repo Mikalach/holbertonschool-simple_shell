@@ -87,7 +87,7 @@ int frk(char **av, char **envp, char *filename)
 		exit(1);
 	}
 	else
-		wait(NULL); /* wait for the child to end */
+		wait(&status); /* wait for the child to end */
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else
