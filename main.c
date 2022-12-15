@@ -80,6 +80,7 @@ void frk(char **av, char **envp, char *filename)
 			if (test == -1)
 			{
 				printf("%s: %s: command not found\n", filename, av[0]);
+				exit(2);
 			}
 		}
 		exit(1);
