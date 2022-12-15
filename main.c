@@ -87,7 +87,7 @@ int frk(char **av, char **envp, char *filename)
 		exit(1);
 	}
 	else
-		wait(NULL); /* wait for the child to end */
+		wait(&status); /* wait for the child to end */
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	else
@@ -132,14 +132,16 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			{
 				freeAvTest = _path1(pathBuffer, &av[0]);
 				if (stat(av[0], &st) == 0)
+				{
 					wifeexit = frk(av, envp, argv[0]);
+					if (wifeexit != 0)
+					{
+						FREEALL;
+						exit(wifeexit);
+					}
+				}
 				else
 					dprintf(STDERR_FILENO, "./hsh: 1: %s: not found\n", av[0]);
-				if (wifeexit != 0)
-				{
-					FREEALL;
-					exit(wifeexit);
-				}
 			}
 		}
 		if (ext == 1)
