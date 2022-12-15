@@ -25,7 +25,8 @@ int getPath(char **envp)
 	while (envp[i])
 	{
 		if ((envp[i][0] == 'P') && (envp[i][1] == 'A') &&
-			(envp[i][2] == 'T') && (envp[i][3] == 'H'))
+			(envp[i][2] == 'T') && (envp[i][3] == 'H') &&
+			(envp[i][4] == '='))
 			return (i);
 		i++;
 	}
@@ -123,14 +124,14 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 			printfullenv(envp);
 		else
 		{	isOnlySpaces = _strtok1(av, bf);
-			if (isOnlySpaces == 1)
-			{FREEALL;
-			exit(0); }
-			freeAvTest = _path1(pathBuffer, &av[0]);
-			if (stat(av[0], &st) == 0)
-				frk(av, envp, argv[0]);
-			else
-				printf("%s: %s: command not found\n", argv[0], av[0]);
+			if (isOnlySpaces == 0)
+			{
+				freeAvTest = _path1(pathBuffer, &av[0]);
+				if (stat(av[0], &st) == 0)
+					frk(av, envp, argv[0]);
+				else
+					dprintf(STDERR_FILENO, "./hsh: 1: %s: not found\n", av[0]);
+			}
 		}
 		if (ext == 1)
 			break;
