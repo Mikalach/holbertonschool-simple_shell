@@ -24,7 +24,7 @@ int getPath(char **envp)
 
 	while (envp[i])
 	{
-		if ((envp[i][0] == 'A') && (envp[i][1] == 'A') &&
+		if ((envp[i][0] == 'P') && (envp[i][1] == 'A') &&
 			(envp[i][2] == 'T') && (envp[i][3] == 'H'))
 			return (i);
 		i++;
