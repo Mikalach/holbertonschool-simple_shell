@@ -6,42 +6,33 @@
  *@usrinpt: is the input from the user
  *Return: void
 */
-void _path1(char *impath, char **usrinpt)
+int _path1(char *impath, char **usrinpt)
 {
-	int x = 0;
 	char *usep = NULL;
-	char **tokenp = calloc(sizeof(char *), 100);
+	char *copy_usep = NULL;
 	char *path_tmp = NULL;
 	struct stat st;
 
 	if (!*usrinpt)
+		return (0);
+	if (stat(*usrinpt, &st) == 0)
+		return (0);
+
+	copy_usep = malloc(sizeof(char) * 1024);
+
+	while (usep = strtok(impath, ":="))
 	{
-		free(tokenp);
-		/*return;*/
-	}
-	path_tmp = strdup(impath);
-	do {
-		usep = strtok(path_tmp, ":=");
-		tokenp[x] = usep;
-		path_tmp = NULL;
-		x++;
-	} while (usep);
-	x = x - 2;
-	while (x > 0)
-	{
-		strcat(tokenp[x], "/");
-		strcat(tokenp[x], *usrinpt);
-		if (stat(tokenp[x], &st) == 0)
+		impath = NULL;
+		strcpy(copy_usep, usep);
+		strcat(copy_usep, "/");
+		strcat(copy_usep, *usrinpt);
+		if (stat(copy_usep, &st) == 0)
 		{
-			*usrinpt = strdup(tokenp[x]);
-			break;
+			*usrinpt = strdup(copy_usep);
+			free(copy_usep);
+			return (1);
 		}
-		if (!tokenp[x])
-			free(tokenp[x]);
-		x--;
 	}
-	free(usep);
-	free(path_tmp);
-	free(tokenp);
-	/*return;*/
+	free(copy_usep);
+	return (0);
 }

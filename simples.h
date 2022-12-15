@@ -9,6 +9,6 @@
 #include <sys/stat.h>
 #include <string.h>
 
-void _path1(char *impath, char **usrinpt);
+int _path1(char *impath, char **usrinpt);
 int only_space(char *usrinpt);
 #endif

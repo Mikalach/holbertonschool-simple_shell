@@ -14,6 +14,25 @@ void printfullenv(char **envp)
 }
 
 /**
+ * getPath - get the path throught envp
+ * @path: int
+ * @envp: environnement
+ * Return: path
+ */
+int getPath(char **envp)
+{
+	int i = 0;
+
+	while (envp[i])
+	{
+		if ((envp[i][0] == 'P') && (envp[i][1] == 'A') &&
+			(envp[i][2] == 'T') && (envp[i][3] == 'H'))
+			return (i);
+		i++;
+	}
+	exit(0);
+}
+/**
  * _strtok1 - Tokenize a long string into multiple shorter strings
  * @av: source buffer
  * @line: line we want to tokenize
@@ -76,22 +95,30 @@ void frk(char **av, char **envp, char *filename)
  */
 int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
-	char *bf = NULL, **av = NULL;
+	char *bf = NULL, **av = NULL, *pathBuffer = NULL;
 	size_t bufsize = 1024;
-	int ext = 0;
+	int ext = 0, path = 100, freeAvTest;
 
 	/* Array-Buffer creation */
 	av = calloc(1024, sizeof(char *));
 	if (av == NULL)
 	{perror("Allocation failed (av)");
 		exit(1); }
-	bf = calloc(1024, sizeof(char *));
+	bf = calloc(1024, sizeof(char));
 	if (bf == NULL)
 	{perror("Allocation failed (bf)");
 		exit(1); }
+	pathBuffer = calloc(1000, sizeof(char));
+	if (pathBuffer == NULL)
+	{perror("Allocation failed (bf)");
+		exit(1); }
+	path = getPath(envp);
 	/* The Simple Shell */
 	while (1)
 	{
+		freeAvTest = 0;
+		if (envp[path])
+			strcpy(pathBuffer, envp[path]);
 		/* printf("($) "); */
 		getline(&bf, &bufsize, stdin);
 		/* if we want to exit */
@@ -103,13 +130,16 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else
 		{
 			_strtok1(av, bf);
-			_path1(envp[12], &av[0]);
+			freeAvTest = _path1(pathBuffer, &av[0]);
 			frk(av, envp, argv[0]);
 		}
 
 		if (ext == 1)
 			break;
+		if (freeAvTest == 1)
+			free(av[0]);
 	}
+	free(pathBuffer);
 	free(bf);
 	free(av);
 	return (0);
