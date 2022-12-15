@@ -8,40 +8,31 @@
 */
 void _path1(char *impath, char **usrinpt)
 {
-	int x = 0;
 	char *usep = NULL;
-	char **tokenp = calloc(sizeof(char *), 100);
+	char *copy_usep = NULL;
 	char *path_tmp = NULL;
 	struct stat st;
 
+	copy_usep = malloc(sizeof(char) * 1024);
+
 	if (!*usrinpt)
 	{
-		free(tokenp);
-		/*return;*/
 	}
+
 	path_tmp = strdup(impath);
-	do {
-		usep = strtok(path_tmp, ":=");
-		tokenp[x] = usep;
-		path_tmp = NULL;
-		x++;
-	} while (usep);
-	x = x - 2;
-	while (x > 0)
+
+	while (usep = strtok(path_tmp, ":="))
 	{
-		strcat(tokenp[x], "/");
-		strcat(tokenp[x], *usrinpt);
-		if (stat(tokenp[x], &st) == 0)
+		path_tmp = NULL;
+		strcpy(copy_usep, usep);
+		strcat(copy_usep, "/");
+		strcat(copy_usep, *usrinpt);
+		if (stat(copy_usep, &st) == 0)
 		{
-			*usrinpt = strdup(tokenp[x]);
+			*usrinpt = strdup(copy_usep);
 			break;
 		}
-		if (!tokenp[x])
-			free(tokenp[x]);
-		x--;
 	}
-	free(usep);
+	free(copy_usep);
 	free(path_tmp);
-	free(tokenp);
-	/*return;*/
 }

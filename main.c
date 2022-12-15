@@ -14,6 +14,25 @@ void printfullenv(char **envp)
 }
 
 /**
+ * getPath - get the path throught envp
+ * @path: int
+ * @envp: environnement
+ * Return: path
+ */
+int getPath(char **envp)
+{
+	int i = 0;
+
+	while (envp[i])
+	{
+		if ((envp[i][0] == 'P') && (envp[i][1] == 'A') &&
+			(envp[i][2] == 'T') && (envp[i][3] == 'H'))
+			return (i);
+		i++;
+	}
+	exit(0);
+}
+/**
  * _strtok1 - Tokenize a long string into multiple shorter strings
  * @av: source buffer
  * @line: line we want to tokenize
@@ -78,7 +97,7 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 {
 	char *bf = NULL, **av = NULL;
 	size_t bufsize = 1024;
-	int ext = 0;
+	int ext = 0, path = 100;
 
 	/* Array-Buffer creation */
 	av = calloc(1024, sizeof(char *));
@@ -103,7 +122,8 @@ int main(__attribute__((unused))int argc, char **argv, char **envp)
 		else
 		{
 			_strtok1(av, bf);
-			_path1(envp[12], &av[0]);
+			path = getPath(envp);
+			_path1(envp[path], &av[0]);
 			frk(av, envp, argv[0]);
 		}
 
